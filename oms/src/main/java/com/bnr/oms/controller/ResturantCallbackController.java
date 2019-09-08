@@ -1,7 +1,7 @@
 package com.bnr.oms.controller;
 
 import com.bnr.oms.domain.OrderCallback;
-import com.bnr.oms.events.OrderClose;
+import com.bnr.oms.events.OrderCloseEvent;
 import com.bnr.oms.registry.ServiceRegistry;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class ResturantCallbackController {
 
   @PostMapping(path = "/callback", consumes = "application/json")
   public void updateStatus(@RequestBody @Valid OrderCallback callback) {
-    OrderClose closeEvent = new OrderClose(callback.getOrderId(), callback.getStatus());
+    OrderCloseEvent closeEvent = new OrderCloseEvent(callback.getOrderId(), callback.getStatus());
     registry.find(closeEvent.getEventType()).forEach(
         notificator -> notificator.notify(closeEvent)
     );

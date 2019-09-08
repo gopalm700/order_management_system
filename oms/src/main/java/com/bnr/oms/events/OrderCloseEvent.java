@@ -8,11 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderClose extends OrderEvent {
+public class OrderCloseEvent extends OrderEvent {
 
   private OrderStatus status;
 
-  public OrderClose(String orderId, OrderStatus status) {
+  public OrderCloseEvent(String orderId, OrderStatus status) {
     super(orderId);
     this.status = status;
   }

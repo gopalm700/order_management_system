@@ -7,8 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderReminder extends OrderEvent {
-  public OrderReminder(String orderId) {
+public class OrderReminderEvent extends OrderEvent {
+  public OrderReminderEvent(String orderId) {
     super(orderId);
   }
 

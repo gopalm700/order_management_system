@@ -5,7 +5,7 @@ import static com.bnr.oms.events.EventType.ORDER_REMINDER;
 
 import com.bnr.oms.events.EventType;
 import com.bnr.oms.events.OrderEvent;
-import com.bnr.oms.events.OrderNotify;
+import com.bnr.oms.events.OrderNotifyEvent;
 import com.bnr.oms.messaging.dto.QueueMessage;
 import com.bnr.oms.notificator.Notificator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,11 +35,11 @@ public class ResturantNotificator implements Notificator {
 
   @Override
   public void notify(final OrderEvent event) {
-    if (event instanceof OrderNotify) {
+    if (event instanceof OrderNotifyEvent) {
       logger.info("Notifying Restaurant " + event.getOrderId());
       rabbitTemplate.setExchange(fanoutExchange);
       try {
-        OrderNotify notifyEvent = (OrderNotify) event;
+        OrderNotifyEvent notifyEvent = (OrderNotifyEvent) event;
 
         QueueMessage message = QueueMessage.builder().deliveryTime(notifyEvent.getDeliveryTime())
             .orderId(notifyEvent.getOrderId())

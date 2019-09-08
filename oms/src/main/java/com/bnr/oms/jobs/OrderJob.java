@@ -17,13 +17,12 @@ public abstract class OrderJob {
     do {
       count++;
       success = callable.call();
-      delay();
     } while (count < 3 && !success);
   }
 
   final void delay() {
     try {
-      TimeUnit.SECONDS.sleep(10);
+      TimeUnit.SECONDS.sleep(2);
     } catch (InterruptedException e) {
       logger.error("Error occurred in initial delay ", e);
     }

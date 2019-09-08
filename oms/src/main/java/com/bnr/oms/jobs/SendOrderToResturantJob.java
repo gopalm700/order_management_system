@@ -4,7 +4,7 @@ import static com.bnr.oms.persistence.entity.Order.OrderStatus.NEW;
 import static com.bnr.oms.persistence.entity.Order.OrderStatus.IN_PROGRESS;
 import static java.util.Calendar.MINUTE;
 
-import com.bnr.oms.events.OrderNotify;
+import com.bnr.oms.events.OrderNotifyEvent;
 import com.bnr.oms.persistence.entity.Order;
 import com.bnr.oms.persistence.repo.OrderRepository;
 import com.bnr.oms.workflow.OrchestrationService;
@@ -37,6 +37,7 @@ public class SendOrderToResturantJob extends OrderJob{
 
   @Scheduled(fixedDelay = 5000)
   public void notifyEligibleOrders() {
+    logger.info("Notify Restaurant job.");
     try {
       runInTxn(() -> sendOrders());
     } catch (Exception e) {
@@ -56,8 +57,8 @@ public class SendOrderToResturantJob extends OrderJob{
         logger.info("Sending orders to restaurant");
 
         orders.stream()
-            .map(o -> new OrderNotify(o.getId(), o.getDeliveryTime(), o.getOrderDetails()))
-            .forEach(orderNotify -> orchestrationService.orchestrate(orderNotify));
+            .map(o -> new OrderNotifyEvent(o.getId(), o.getDeliveryTime(), o.getOrderDetails()))
+            .forEach(orderNotifyEvent -> orchestrationService.orchestrate(orderNotifyEvent));
 
         List<Order> inProgresOrders = orders.stream()
             .map(order -> order.updateStatus(IN_PROGRESS))
@@ -66,6 +67,7 @@ public class SendOrderToResturantJob extends OrderJob{
         repository.saveAll(inProgresOrders);
       }
     } catch (final OptimisticLockException e) {
+      delay();
       return false;
     }
     return true;

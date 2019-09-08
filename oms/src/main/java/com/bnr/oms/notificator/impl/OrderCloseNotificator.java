@@ -3,7 +3,7 @@ package com.bnr.oms.notificator.impl;
 import static com.bnr.oms.events.EventType.ORDER_CLOSE;
 
 import com.bnr.oms.events.EventType;
-import com.bnr.oms.events.OrderClose;
+import com.bnr.oms.events.OrderCloseEvent;
 import com.bnr.oms.events.OrderEvent;
 import com.bnr.oms.exception.OrderNotExistsException;
 import com.bnr.oms.notificator.Notificator;
@@ -32,7 +32,7 @@ public class OrderCloseNotificator implements Notificator {
   @Transactional
   public void notify(final OrderEvent event) {
     logger.debug("Closing order for order " + event.getOrderId());
-    OrderClose closeEvent = (OrderClose) event;
+    OrderCloseEvent closeEvent = (OrderCloseEvent) event;
     Optional<Order> optionalOrder = repository.findById(event.getOrderId());
 
     if (optionalOrder.isPresent()) {

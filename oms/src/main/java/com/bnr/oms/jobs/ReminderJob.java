@@ -4,7 +4,7 @@ import static com.bnr.oms.persistence.entity.Order.OrderStatus.IN_PROGRESS;
 import static com.bnr.oms.persistence.entity.Order.OrderStatus.ORDER_REMINDED;
 import static java.util.Calendar.MINUTE;
 
-import com.bnr.oms.events.OrderReminder;
+import com.bnr.oms.events.OrderReminderEvent;
 import com.bnr.oms.persistence.entity.Order;
 import com.bnr.oms.persistence.repo.OrderRepository;
 import com.bnr.oms.workflow.OrchestrationService;
@@ -23,7 +23,7 @@ import org.springframework.util.CollectionUtils;
 @Component
 public class ReminderJob extends OrderJob {
 
-  private final Logger logger = LoggerFactory.getLogger(OrderEscalationJob.class);
+  private final Logger logger = LoggerFactory.getLogger(ReminderJob.class);
 
   private OrderRepository repository;
 
@@ -61,8 +61,8 @@ public class ReminderJob extends OrderJob {
         logger.info(ids);
 
         orders.stream()
-            .map(order -> new OrderReminder(order.getId()))
-            .forEach(orderReminder -> orchestrationService.orchestrate(orderReminder));
+            .map(order -> new OrderReminderEvent(order.getId()))
+            .forEach(orderReminderEvent -> orchestrationService.orchestrate(orderReminderEvent));
 
         List<Order> escalatedOrders = orders.stream()
             .map(order -> order.updateStatus(ORDER_REMINDED))
@@ -71,6 +71,7 @@ public class ReminderJob extends OrderJob {
         repository.saveAll(escalatedOrders);
       }
     } catch (OptimisticLockException e) {
+      delay();
       return false;
     }
     return true;

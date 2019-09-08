@@ -8,12 +8,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderNotify extends OrderEvent {
+public class OrderNotifyEvent extends OrderEvent {
 
   private Date deliveryTime;
   private Integer quantity;
 
-  public OrderNotify(String orderId, Date deliveryTime, Integer quantity) {
+  public OrderNotifyEvent(String orderId, Date deliveryTime, Integer quantity) {
     super(orderId);
     this.deliveryTime = deliveryTime;
     this.quantity = quantity;

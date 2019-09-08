@@ -1,8 +1,8 @@
 package com.bnr.oms.controller;
 
 import com.bnr.oms.domain.OrderDto;
-import com.bnr.oms.domain.OrderInfo;
-import com.bnr.oms.events.OrderCreated;
+import com.bnr.oms.domain.OrderResponse;
+import com.bnr.oms.events.OrderCreatedEvent;
 import com.bnr.oms.workflow.OrchestrationService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,19 +26,19 @@ public class OrderController {
   }
 
   @PostMapping(consumes = "application/json", produces = "application/json")
-  public OrderInfo createOrder(@RequestBody @Valid OrderDto order) {
+  public OrderResponse createOrder(@RequestBody @Valid OrderDto orderDto) {
     service.orchestrate(
-        new OrderCreated(order.getOrderId(), order.getOrderTime(), order.getQuantity()));
-    return new OrderInfo(order.getOrderId());
+        new OrderCreatedEvent(orderDto.getOrderId(), orderDto.getOrderTime(), orderDto.getQuantity()));
+    return new OrderResponse(orderDto.getOrderId());
   }
 
   @PostMapping(path = "/bulk", consumes = "application/json", produces = "application/json")
-  public List<OrderInfo> createOrders(@RequestBody @Valid @NotEmpty List<OrderDto> orders) {
+  public List<OrderResponse> createOrders(@RequestBody @Valid @NotEmpty List<OrderDto> orders) {
     return orders.stream()
         .map(order -> {
               service.orchestrate(
-                  new OrderCreated(order.getOrderId(), order.getOrderTime(), order.getQuantity()));
-              return new OrderInfo(order.getOrderId());
+                  new OrderCreatedEvent(order.getOrderId(), order.getOrderTime(), order.getQuantity()));
+              return new OrderResponse(order.getOrderId());
             }
         ).collect(Collectors.toList());
   }

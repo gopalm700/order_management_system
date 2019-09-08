@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderInfo {
+public class OrderResponse {
   private String orderId;
 }

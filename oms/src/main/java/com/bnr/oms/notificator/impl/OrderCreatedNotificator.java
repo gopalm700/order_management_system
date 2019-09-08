@@ -3,12 +3,11 @@ package com.bnr.oms.notificator.impl;
 import static com.bnr.oms.events.EventType.ORDER_CREATED;
 import static com.bnr.oms.persistence.entity.Order.OrderStatus.NEW;
 
-import com.bnr.oms.events.OrderCreated;
+import com.bnr.oms.events.OrderCreatedEvent;
 import com.bnr.oms.events.OrderEvent;
 import com.bnr.oms.events.EventType;
 import com.bnr.oms.notificator.Notificator;
 import com.bnr.oms.persistence.entity.Order;
-import com.bnr.oms.persistence.repo.OrderRepository;
 import com.bnr.oms.service.OrderService;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,7 +26,7 @@ public class OrderCreatedNotificator implements Notificator {
 
   @Override
   public void notify(final OrderEvent event) {
-    OrderCreated createdEvent = (OrderCreated) event;
+    OrderCreatedEvent createdEvent = (OrderCreatedEvent) event;
     Order order = Order.builder()
         .deliveryTime(createdEvent.getDeliveryTime())
         .notifyTime(

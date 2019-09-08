@@ -16,8 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Builder
@@ -46,16 +44,9 @@ public class Order {
   @Temporal(TIMESTAMP)
   private Date notifyTime;
 
-  @CreatedDate
-  @Temporal(TIMESTAMP)
-  protected Date creationDate;
-
-  @LastModifiedDate
-  @Temporal(TIMESTAMP)
-  protected Date lastModifiedDate;
-
   @Version
-  private Integer version;
+  @Column(name = "version")
+  private Long version;
 
   public Order updateStatus(OrderStatus status){
     this.status = status;

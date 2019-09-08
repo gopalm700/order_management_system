@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServiceRegistryImpl implements ServiceRegistry {
 
-  @Autowired
   private List<Notificator> notificators;
+
+  @Autowired
+  public ServiceRegistryImpl(List<Notificator> notificators) {
+    this.notificators = notificators;
+  }
 
   @Override
   public List<Notificator> find(final EventType eventType) {

@@ -1,5 +1,6 @@
 package com.bnr.oms.events;
 
+import static com.bnr.oms.events.EventType.ORDER_REMINDER;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ public class OrderReminder extends OrderEvent {
   }
 
   @Override
-  public String getEventType() {
-    return "ORDER-REMINDER";
+  public EventType getEventType() {
+    return ORDER_REMINDER;
   }
 }

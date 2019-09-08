@@ -1,13 +1,14 @@
 package com.bnr.oms.events;
 
+
+import static com.bnr.oms.events.EventType.ORDER_CREATED;
+
 import java.util.Date;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class OrderCreated extends OrderEvent {
 
   private Date deliveryTime;
@@ -20,7 +21,7 @@ public class OrderCreated extends OrderEvent {
   }
 
   @Override
-  public String getEventType() {
-    return "ORDER-CREATED";
+  public EventType getEventType() {
+    return ORDER_CREATED;
   }
 }

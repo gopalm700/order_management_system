@@ -1,5 +1,7 @@
 package com.bnr.oms.events;
 
+import static com.bnr.oms.events.EventType.ORDER_ESCALATED;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +14,7 @@ public class OrderEscalate extends OrderEvent {
   }
 
   @Override
-  public String getEventType() {
-    return "ORDER-ESCALETED";
+  public EventType getEventType() {
+    return ORDER_ESCALATED;
   }
 }

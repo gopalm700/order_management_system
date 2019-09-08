@@ -8,17 +8,24 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
-@Data
 @Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "order_table")
 public class Order {
 
   @Id
@@ -49,4 +56,11 @@ public class Order {
 
   @Version
   private Integer version;
+
+
+  public enum OrderStatus {
+    CREATED, IN_PROGRESS, ORDER_REMINDED, ESCALATE_HUMAN, DELIVERED, REJECTED
+  }
 }
+
+

@@ -1,11 +1,11 @@
 package com.bnr.oms.jobs;
 
-import static com.bnr.oms.persistence.entity.OrderStatus.CREATED;
+import static com.bnr.oms.persistence.entity.Order.OrderStatus.CREATED;
+import static com.bnr.oms.persistence.entity.Order.OrderStatus.IN_PROGRESS;
 import static java.util.Calendar.MINUTE;
 
 import com.bnr.oms.events.OrderNotify;
 import com.bnr.oms.persistence.entity.Order;
-import com.bnr.oms.persistence.entity.OrderStatus;
 import com.bnr.oms.persistence.repo.OrderRepository;
 import com.bnr.oms.workflow.OrchestrationService;
 import java.util.Calendar;
@@ -35,7 +35,8 @@ public class SendOrderToResturantJob {
 
   @Scheduled(fixedDelay = 5000)
   public void notifyEligibleOrders() {
-    boolean success = false;
+    logger.info("Notify resturants");
+    boolean success;
     byte count = 0;
     do {
       count++;
@@ -45,27 +46,28 @@ public class SendOrderToResturantJob {
 
   @Transactional
   private boolean sendOrders() {
-    Date currentDate = new Date();
     Calendar cal = Calendar.getInstance();
-    cal.setTime(currentDate);
+    cal.setTime(new Date());
     cal.add(MINUTE, 1);
     try {
       List<Order> orders = repository
-          .findAllByStatusAndNotifyTimeBetween(CREATED, currentDate, cal.getTime());
+          .findAllByStatusAndNotifyTimeBeforeOrderByNotifyTimeAsc(CREATED, cal.getTime());
       if (!CollectionUtils.isEmpty(orders)) {
         logger.info("Sending orders to resturant");
         orders
             .forEach(
-                order -> orchestrationService.orchestrate(new OrderNotify(order.getId())));
+                order -> orchestrationService.orchestrate(new OrderNotify(
+                    order.getId(), order.getDeliveryTime(), order.getOrderDetails()
+                )));
         List<Order> inprogressOrders = orders.stream().map(e -> {
-          e.setStatus(OrderStatus.IN_PROGRESS);
+          e.setStatus(IN_PROGRESS);
           return e;
         }).collect(Collectors.toList());
         repository.saveAll(inprogressOrders);
       }
     } catch (OptimisticLockException e) {
       try {
-        TimeUnit.MINUTES.sleep(1);
+        TimeUnit.SECONDS.sleep(10);
       } catch (Exception ex) {
       }
       return false;

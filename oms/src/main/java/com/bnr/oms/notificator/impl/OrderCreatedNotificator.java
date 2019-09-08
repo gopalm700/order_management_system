@@ -1,10 +1,13 @@
 package com.bnr.oms.notificator.impl;
 
+import static com.bnr.oms.events.EventType.ORDER_CREATED;
+import static com.bnr.oms.persistence.entity.Order.OrderStatus.CREATED;
+
 import com.bnr.oms.events.OrderCreated;
 import com.bnr.oms.events.OrderEvent;
+import com.bnr.oms.events.EventType;
 import com.bnr.oms.notificator.Notificator;
 import com.bnr.oms.persistence.entity.Order;
-import com.bnr.oms.persistence.entity.OrderStatus;
 import com.bnr.oms.service.OrderService;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +28,7 @@ public class OrderCreatedNotificator implements Notificator {
         .notifyTime(
             calculateDeliveryTime(createdEvent.getDeliveryTime(), createdEvent.getQuantity()))
         .id(event.getOrderId())
-        .status(OrderStatus.CREATED)
+        .status(CREATED)
         .orderDetails(createdEvent.getQuantity()).build();
     service.createOrder(order);
   }
@@ -39,7 +42,7 @@ public class OrderCreatedNotificator implements Notificator {
   }
 
   @Override
-  public boolean supports(String eventType) {
-    return eventType.equals("ORDER-CREATED");
+  public boolean supports(EventType eventType) {
+    return eventType == ORDER_CREATED;
   }
 }

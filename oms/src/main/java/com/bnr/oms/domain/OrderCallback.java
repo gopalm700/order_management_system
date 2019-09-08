@@ -1,6 +1,6 @@
 package com.bnr.oms.domain;
 
-import com.bnr.oms.persistence.entity.OrderStatus;
+import com.bnr.oms.persistence.entity.Order.OrderStatus;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Data;

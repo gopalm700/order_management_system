@@ -1,6 +1,8 @@
 package com.bnr.oms.events;
 
-import com.bnr.oms.persistence.entity.OrderStatus;
+import static com.bnr.oms.events.EventType.ORDER_CLOSE;
+
+import com.bnr.oms.persistence.entity.Order.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,11 +14,11 @@ public class OrderClose extends OrderEvent {
 
   public OrderClose(String orderId, OrderStatus status) {
     super(orderId);
-    this.status=status;
+    this.status = status;
   }
 
   @Override
-  public String getEventType() {
-    return "ORDER-CLOSE";
+  public EventType getEventType() {
+    return ORDER_CLOSE;
   }
 }

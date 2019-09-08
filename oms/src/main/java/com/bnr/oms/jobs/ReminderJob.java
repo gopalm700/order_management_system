@@ -1,11 +1,11 @@
 package com.bnr.oms.jobs;
 
-import static com.bnr.oms.persistence.entity.OrderStatus.IN_PROGRESS;
+import static com.bnr.oms.persistence.entity.Order.OrderStatus.IN_PROGRESS;
+import static com.bnr.oms.persistence.entity.Order.OrderStatus.ORDER_REMINDED;
 import static java.util.Calendar.MINUTE;
 
 import com.bnr.oms.events.OrderReminder;
 import com.bnr.oms.persistence.entity.Order;
-import com.bnr.oms.persistence.entity.OrderStatus;
 import com.bnr.oms.persistence.repo.OrderRepository;
 import com.bnr.oms.workflow.OrchestrationService;
 import java.util.Calendar;
@@ -35,6 +35,7 @@ public class ReminderJob {
 
   @Scheduled(fixedDelay = 20000)
   public void reminder() {
+    logger.info("Reminder Job running.");
     boolean success;
     byte count = 0;
     do {
@@ -51,7 +52,7 @@ public class ReminderJob {
     cal.add(MINUTE, -2);
     try {
       List<Order> orders = repository
-          .findAllByStatusAndNotifyTimeBefore(IN_PROGRESS, cal.getTime());
+          .findAllByStatusAndNotifyTimeBeforeOrderByNotifyTimeAsc(IN_PROGRESS, cal.getTime());
       if (!CollectionUtils.isEmpty(orders)) {
         logger.info(
             "Sending reminders for order ids " + orders.stream().map(o -> o.getId()).collect(
@@ -59,7 +60,7 @@ public class ReminderJob {
         orders.forEach(
             order -> orchestrationService.orchestrate(new OrderReminder(order.getId())));
         List<Order> escaletedOrders = orders.stream().map(e -> {
-          e.setStatus(OrderStatus.ORDER_REMINDED);
+          e.setStatus(ORDER_REMINDED);
           return e;
         }).collect(Collectors.toList());
         repository.saveAll(escaletedOrders);

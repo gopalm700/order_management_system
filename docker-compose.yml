@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  rabbit1:
+    image: "rabbitmq:3-management"
+    hostname: "localhost"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq1"
+
+  order_managment_system:
+    image: oms:1
+    build:
+      context: ./oms/
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbit1
+    command: 'nc -vz localhost 5672'
+    ports:
+      - "8080:8080"
+    links:
+      - rabbit1
+
+  order_notification_system:
+    image: notification:1
+    build:
+      context: ./notification/
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbit1
+      - order_managment_system
+    command: 'nc -vz localhost 5672'
+    ports:
+      - "8082:8082"
+    links:
+      - rabbit1

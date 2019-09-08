@@ -1,5 +1,6 @@
-package com.bnr.notification.messaging
+package com.bnr.notification.config
 
+import com.bnr.notification.messaging.QueueConsumer
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
 import org.springframework.amqp.core.FanoutExchange

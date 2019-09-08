@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends CrudRepository<Order, String> {
-  List<Order> findAllByStatusAndNotifyTimeBeforeOrderByNotifyTimeAsc(OrderStatus status, Date time);
+
+  List<Order> findAllByStatusAndNotifyTimeBeforeOrderByNotifyTimeAsc(final OrderStatus status,
+      final Date time);
 }

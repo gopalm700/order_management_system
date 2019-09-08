@@ -9,13 +9,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrchestrationServiceImpl implements OrchestrationService {
 
+  private ServiceRegistry registry;
+
   @Autowired
-  private ServiceRegistry factory;
+  public OrchestrationServiceImpl(ServiceRegistry registry) {
+    this.registry = registry;
+  }
 
   @Override
-  public void orchestrate(OrderEvent event) {
-    factory.find(event.getEventType()).forEach(
-        notificator -> notificator.notify(event)
-    );
+  public void orchestrate(final OrderEvent event) {
+    registry.find(event.getEventType())
+        .forEach(notificator -> notificator.notify(event));
   }
 }

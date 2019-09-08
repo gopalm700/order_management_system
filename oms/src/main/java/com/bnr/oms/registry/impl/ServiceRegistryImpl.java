@@ -15,9 +15,9 @@ public class ServiceRegistryImpl implements ServiceRegistry {
   private List<Notificator> notificators;
 
   @Override
-  public List<Notificator> find(EventType eventType) {
-    return notificators.stream().filter(
-        notificator -> notificator.supports(eventType)
-    ).collect(Collectors.toList());
+  public List<Notificator> find(final EventType eventType) {
+    return notificators.stream()
+        .filter(notificator -> notificator.supports(eventType))
+        .collect(Collectors.toList());
   }
 }

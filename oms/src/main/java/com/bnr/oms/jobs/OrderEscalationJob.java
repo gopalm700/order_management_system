@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderEscalationJob {
+public class OrderEscalationJob extends OrderJob {
 
   private Logger logger = LoggerFactory.getLogger(OrderEscalationJob.class);
 

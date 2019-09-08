@@ -21,6 +21,11 @@ public class OrderController {
   @Autowired
   private OrchestrationService service;
 
+  @Autowired
+  public OrderController(OrchestrationService service) {
+    this.service = service;
+  }
+
   @PostMapping(consumes = "application/json", produces = "application/json")
   public OrderInfo createOrder(@RequestBody @Valid OrderDto order) {
     service.orchestrate(
@@ -30,15 +35,12 @@ public class OrderController {
 
   @PostMapping(path = "/bulk", consumes = "application/json", produces = "application/json")
   public List<OrderInfo> createOrders(@RequestBody @Valid @NotEmpty List<OrderDto> orders) {
-    return orders.stream().map(
-        order -> {
-          service.orchestrate(
-              new OrderCreated(order.getOrderId(), order.getOrderTime(), order.getQuantity()));
-          return order.getOrderId();
-        }
-
-    ).map(
-        id -> new OrderInfo(id)
-    ).collect(Collectors.toList());
+    return orders.stream()
+        .map(order -> {
+              service.orchestrate(
+                  new OrderCreated(order.getOrderId(), order.getOrderTime(), order.getQuantity()));
+              return new OrderInfo(order.getOrderId());
+            }
+        ).collect(Collectors.toList());
   }
 }

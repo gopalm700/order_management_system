@@ -34,30 +34,33 @@ public class ResturantNotificator implements Notificator {
   private static final Logger logger = LoggerFactory.getLogger(ResturantNotificator.class);
 
   @Override
-  public void notify(OrderEvent event) {
+  public void notify(final OrderEvent event) {
     if (event instanceof OrderNotify) {
-      logger.info("Notifying Resturant " + event.getOrderId());
+      logger.info("Notifying Restaurant " + event.getOrderId());
       rabbitTemplate.setExchange(fanoutExchange);
       try {
         OrderNotify notifyEvent = (OrderNotify) event;
+
         QueueMessage message = QueueMessage.builder().deliveryTime(notifyEvent.getDeliveryTime())
             .orderId(notifyEvent.getOrderId())
             .quantity(notifyEvent.getQuantity())
             .callback("/api/callback")
             .action("CREATE_ORDER").build();
+
         rabbitTemplate.convertAndSend(new ObjectMapper().writeValueAsString(message));
+
       } catch (Exception e) {
-        logger.error("Error occured when notifying resturant  " + event.orderId, e);
+        logger.error("Error occurred when notifying restaurant  " + event.orderId, e);
       }
     } else {
       QueueMessage message = QueueMessage.builder()
           .orderId(event.getOrderId())
           .action("REMINDER").build();
-      logger.info("Reminding Resturant " + event.getOrderId());
+      logger.info("Reminding Restaurant " + event.getOrderId());
       try {
         rabbitTemplate.convertAndSend(new ObjectMapper().writeValueAsString(message));
       } catch (Exception e) {
-        logger.error("Error occured when notifying resturant  " + event.orderId, e);
+        logger.error("Error occurred when notifying restaurant  " + event.orderId, e);
       }
     }
   }

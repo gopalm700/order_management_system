@@ -14,13 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ResturantCallbackController {
 
+  private ServiceRegistry registry;
+
   @Autowired
-  private ServiceRegistry factory;
+  public ResturantCallbackController(ServiceRegistry registry) {
+    this.registry = registry;
+  }
 
   @PostMapping(path = "/callback", consumes = "application/json")
   public void updateStatus(@RequestBody @Valid OrderCallback callback) {
     OrderClose closeEvent = new OrderClose(callback.getOrderId(), callback.getStatus());
-    factory.find(closeEvent.getEventType()).forEach(
+    registry.find(closeEvent.getEventType()).forEach(
         notificator -> notificator.notify(closeEvent)
     );
   }

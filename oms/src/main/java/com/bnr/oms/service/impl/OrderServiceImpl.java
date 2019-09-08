@@ -12,11 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-  @Autowired
   private OrderRepository repository;
 
   @Autowired
-  private OrchestrationService orchestrationService;
+  public OrderServiceImpl(OrderRepository repository){
+    this.repository = repository;
+  }
 
   @Override
   @Transactional

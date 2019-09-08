@@ -57,9 +57,14 @@ public class Order {
   @Version
   private Integer version;
 
+  public Order updateStatus(OrderStatus status){
+    this.status = status;
+    return this;
+  }
+
 
   public enum OrderStatus {
-    CREATED, IN_PROGRESS, ORDER_REMINDED, ESCALATE_HUMAN, DELIVERED, REJECTED
+    NEW, IN_PROGRESS, ORDER_REMINDED, ESCALATE_HUMAN, DELIVERED, REJECTED
   }
 }
 

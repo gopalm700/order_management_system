@@ -8,9 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import com.bnr.oms.events.OrderCreatedEvent;
 import com.bnr.oms.events.OrderNotifyEvent;
-import com.bnr.oms.events.OrderReminderEvent;
 import com.bnr.oms.persistence.entity.Order;
 import com.bnr.oms.persistence.entity.Order.OrderStatus;
 import com.bnr.oms.persistence.repo.OrderRepository;

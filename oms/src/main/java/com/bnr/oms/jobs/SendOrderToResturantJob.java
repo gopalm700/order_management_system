@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 @Component
@@ -36,6 +37,7 @@ public class SendOrderToResturantJob extends OrderJob{
   }
 
   @Scheduled(fixedDelay = 5000)
+  @Transactional
   public void notifyEligibleOrders() {
     logger.info("Notify Restaurant job.");
     try {

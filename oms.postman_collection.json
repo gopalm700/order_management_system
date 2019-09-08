@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "b39673e0-d0a7-4375-827c-61bea1397113",
+		"name": "oms",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/api/order/bulk",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orders\": [\n        {\n            \"quantity\": 2,\n            \"orderTime\": \"1567962900000\"\n        },\n        {\n            \"quantity\": 1,\n            \"orderTime\": \"1567983600000\"\n        },\n        {\n            \"quantity\": 4,\n            \"orderTime\": \"1567983600000\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/orders/bulk",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders",
+						"bulk"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

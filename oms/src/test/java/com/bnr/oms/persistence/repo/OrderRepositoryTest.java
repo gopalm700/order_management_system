@@ -26,7 +26,7 @@ public class OrderRepositoryTest {
     assertThat(repository).isNotNull();
   }
 
-  //@Test
+  @Test
   public void testExpectedOrders() {
     repository.save(
         Order.builder().status(OrderStatus.NEW)
@@ -43,5 +43,4 @@ public class OrderRepositoryTest {
     assertThat(orders.size()).isEqualTo(1);
     repository.deleteAll();
   }
-
 }

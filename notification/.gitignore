@@ -6,5 +6,6 @@
 !pom.xml
 !README.md
 !.mvn
+!Dockerfile
 
 .DS*

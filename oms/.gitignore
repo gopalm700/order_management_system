@@ -3,6 +3,7 @@
 !src
 !.gitignore
 !mvnw*
+!Dockerfile
 !pom.xml
 !README.md
 !.mvn
